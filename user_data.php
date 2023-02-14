@@ -13,6 +13,7 @@
     $r = @mysqli_query($dbc, $q);
 
     if ($r) {
+        echo "<h4>You are logged in as, {$_SESSION['username']}</h4>";
         echo "<table align='center' cellspacing='3' cellpadding='3' width='75%' border>
                     <tr>
                         <th align='left'><b>Username</b></th>
@@ -36,3 +37,5 @@
         //Debugging message
         echo '<p>' . mysqli_error($dbc) . '<br/><br/> Query : ' . $q . '</p>';
 }
+?> <button><a href="logout.php">Log Out!</a></button> <?php
+include 'partials/footer.php';
