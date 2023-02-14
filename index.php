@@ -34,8 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     document.getElementById('error').style.color = 'green';
                     document.getElementById('error').style.display = 'block';
                 </script>";
-        //Set the cookies:
-        setcookie('username', $username, time()+3600, '/', '', 0, 0);
+        //Set the session data:
+        session_start();
+        $_SESSION['username'] = $username;
         //Redirect:
         redirect_user('loggedin.php');
     }

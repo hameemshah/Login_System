@@ -1,8 +1,9 @@
 <?php
+    session_start(); //Start session
     $page_title = 'View the Current Users'; 
     include 'partials/header.php';
-    //If users is not logged in  (cookie is not set) then redirect to login page.
-    if (!isset($_COOKIE['username'])) {
+    //If users is not logged in  (session is not set) then redirect to login page.
+    if (!isset($_SESSION['username'])) {
         redirect_user();
         exit();
     }
