@@ -17,10 +17,10 @@ function validateUsername() {
 }
 //check password and confirm password are same or not
 function  validatePassword() {
-    const password = document.getElementById('password').value;
-    const confirm = document.getElementById('confirm').value;
-    const error = document.getElementById('error');
-    if(password != confirm) {
+    const password = document.getElementById('password');
+    const confirm = document.getElementById('confirm');
+    //const error = document.getElementById('error');
+    if(password.value != confirm.value) {
         error.style.display = 'block';
         return false;   
     }

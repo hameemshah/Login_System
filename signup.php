@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Sign Up</title>
-</head>
-<body>
+<?php    
+     //Set the page title
+    $page_title = 'Sign Up';
+    include 'partials/header.php'; 
+?>
     <div class="login">
         <h1>Admin Register</h1>
         <h4>Create your username and password</h4>
@@ -31,58 +26,48 @@
             </form>
         </div>
     </div>
-    <script src="js/script.js"></script>
-</body>
-</html>
+<?php include 'partials/footer.php'; ?>
 <!-- PHP code for form validation -->
 <?php #Form handling script
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //Validate the username and password and confirm password are not empty
-    if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['confirm'])) {
-        //Validate that both password and confirm password are same.
-        if ($_POST['password'] != $_POST['confirm']) {
+        $username = trim(strip_tags($_POST['username']));
+        $password = trim(strip_tags($_POST['password']));
+        $confirm = trim(strip_tags($_POST['confirm']));
+        $validated = check_signup($username, $password, $confirm);
+    //If validation test passed then execute the Insert query.
+    if ($validated) {
+        $q = "INSERT INTO users (username, password) VALUES ('$username', SHA1('$password'))";
+        $r = @mysqli_query($dbc, $q); //Run the query
+        if ($r) { //If query run successfully
+
+            //Print the message
+            echo '<h1>Thank You</h1>';
+            echo '<p>You are now registered. You can now log in on login page.</p>';
+            //Display Success message if everything went right and query was executed successfully.
             echo "<script>
+                        document.getElementById('error').innerHTML = '✅ Account created successfully.';
+                        document.getElementById('error').style.color = 'green';
                         document.getElementById('error').style.display = 'block';
-                    </script>";
-        }
-        else{
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-                if (strlen($username) < 3) {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ Username should be at least three characters.';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                else if (strlen($password) < 6) {
-                    echo '<p class="error">Password should be at least six characters.';
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ Password should be at least six characters.';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                else if (!preg_match("/^[a-zA-Z0-9@._-]+$/", $username)) {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ $username is not valid. <br/>Only alphanumeric characters and @ . - _ symbols are allowed..';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                else {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '✅ Account created successfully.';
-                                document.getElementById('error').style.color = 'green';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                    exit;
-                }
-        }
-    } else {
-        $username = null;
-        echo '<p class="error"></p>';
-        echo "<script>
-        document.getElementById('error').innerHTML = '⚠️ Please fill all the fields!';
-        document.getElementById('error').style.display = 'block';
-    </script>";
+                    </script>";  
+        } else { //If it did not run OK.
+       
+            //Check for duplicate entry the error code 1062 means duplicate entry
+            if (mysqli_errno($dbc) == 1062) {
+                echo "Error: The username '$username' is already taken. Please choose a different one.";
+                echo "<script>
+                            document.getElementById('error').innerHTML = '⚠️ The username  is already taken.';
+                            document.getElementById('error').style.display = 'block';
+                        </script>";  
+            } else {
+            //Public message
+            echo '<h1>System Error</h1>';
+            echo '<p>You could not register due to system error. </p>';
+            //Debugging message
+            echo '<p>' . mysqli_error($dbc) . '<br/><br/> Query: ' . $q . '</p>';
+            }
+        } 
+        //End of  if($r) If.
+        mysqli_close($dbc); //Close the connection.
     }
 }
-    ?>
+?>

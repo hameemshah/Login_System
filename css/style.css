@@ -43,3 +43,7 @@ input:focus {
     font-size: small;
     display: none;
 }
+.error {
+    font-weight: bold;
+    color: #c00;
+}

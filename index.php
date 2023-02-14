@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-    .error {
-    font-weight: bold;
-    color: #c00;
-}
-    </style>
-    <title>Login</title>
-</head>
-<body>
+<?php $page_title = 'Log In'; ?>
+<?php include 'partials/header.php' ?>
     <div class="login">
         <h1>Admin Login</h1>
         <h4>Enter your Username and Password</h4>
@@ -34,50 +20,25 @@
             </form>
         </div>
     </div>
-    <script src="js/script.js"></script>
-</body>
-</html>
+<?php include 'partials/footer.php' ?>
 <?php
 #Form handling script
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //Validate the username and password and confirm password are not empty
-    if (!empty($_POST['username']) && !empty($_POST['password'])) {
-        //Validate that both password and username size.
-            $username = trim(strip_tags($_POST['username']));
-            $password = trim(strip_tags($_POST['password']));
-                if (strlen($username) < 3) {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ Username should be at least three characters.';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                else if (strlen($password) < 6) {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ Password should be at least six characters.';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                //Validate username
-                else if (!preg_match("/^[a-zA-Z0-9@._-]+$/", $username)) {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '⚠️ $username is not valid.<br/> Only alphanumeric characters and @ . - _ symbols are allowed.';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                }
-                else {
-                    echo "<script>
-                                document.getElementById('error').innerHTML = '✅ You have successfully logged in.';
-                                document.getElementById('error').style.color = 'green';
-                                document.getElementById('error').style.display = 'block';
-                            </script>";
-                    exit;
-                }
-    } else {
-        $username = null;
+    $username = trim(strip_tags($_POST['username']));
+    $password = trim(strip_tags($_POST['password']));
+    $validated = check_login($username, $password);
+    if ($validated) {
         echo "<script>
-        document.getElementById('error').innerHTML = '⚠️Please fill all the fields!';
-        document.getElementById('error').style.display = 'block';
-    </script>";
+                    document.getElementById('error').innerHTML = '✅ You have successfully logged in.';
+                    document.getElementById('error').style.color = 'green';
+                    document.getElementById('error').style.display = 'block';
+                </script>";
+        //Set the cookies:
+        setcookie('username', $username, time()+3600, '/', '', 0, 0);
+        //Redirect:
+        redirect_user('loggedin.php');
     }
+    mysqli_close($dbc); //Close the database connection
 }
 ?>
