@@ -9,7 +9,7 @@
     }
     echo '<h1>Registered Users</h1>';
     //Database Query
-    $q = "SELECT username, password, create_time FROM users ORDER BY create_time ASC";
+    $q = "SELECT s_no, username, password, create_time FROM users ORDER BY create_time ASC";
     $r = @mysqli_query($dbc, $q);
 
     if ($r) {
@@ -19,12 +19,14 @@
                         <th align='left'><b>Username</b></th>
                         <th align='left'><b>Password</b></th>
                         <th align='left'><b>Register Date & Time</b></th>
+                        <th align='left'>Edit</th>
                     </tr>";
         while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC)) {
             echo '<tr>
                         <td align="left">' . $row['username'] . '</td>
                         <td align="left">' . $row['password'] . '</td>
                         <td align="left">' . $row['create_time'] . '</td>
+                        <td align="left"><a href="delete.php?user_id=' .  $row['s_no'] . ' ">Delete<a> | <a href="change.php?user_id=' . $row['s_no'] . '">Edit</a></td>
                      </tr>';
         }
         echo '</table>';

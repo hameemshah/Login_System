@@ -60,9 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             }
             if (!$user_found) {
-                echo 'User not found!';
                 echo "<script>
-                            document.getElementById('error').innerHTML = '⚠️ No Username found.';
+                            document.getElementById('error').innerHTML = '⚠️ No User found.';
                             document.getElementById('error').style.display = 'block';
                         </script>";
             }

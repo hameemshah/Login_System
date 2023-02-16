@@ -26,7 +26,6 @@
             </form>
         </div>
     </div>
-<?php include 'partials/footer.php'; ?>
 <!-- PHP code for form validation -->
 <?php #Form handling script
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -70,4 +69,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_close($dbc); //Close the connection.
     }
 }
+include 'partials/footer.php';
 ?>

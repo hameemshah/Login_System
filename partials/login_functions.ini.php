@@ -102,3 +102,34 @@ function check_login($username, $password) {
     }
      return true;
 }
+
+function check_change($confirm, $password)
+{
+    //Check whether empty values
+        if (empty($confirm) && empty($password)) {
+            echo "<script>
+                        document.getElementById('error').innerHTML = '⚠️Please fill all the fields!';
+                        document.getElementById('error').style.display = 'block';
+                    </script>";
+            return false;
+            }
+
+    //Check the password length is greater than 6
+        if (strlen($password) < 6 || strlen($confirm) < 6) {
+            echo "<script>
+                        document.getElementById('error').innerHTML = '⚠️ Password should be at least six characters.';
+                        document.getElementById('error').style.display = 'block';
+                    </script>";
+            return false;
+        }
+
+    //Validate that both password and confirm password are same.
+        if ($password != $confirm) {
+                echo "<script>
+                            document.getElementById('error').innerHTML = '⚠️ Password should be same.';
+                            document.getElementById('error').style.display = 'block';
+                        </script>";
+            return false;
+        }
+    return true;
+}

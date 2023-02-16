@@ -21,8 +21,10 @@ function  validatePassword() {
     const confirm = document.getElementById('confirm');
     //const error = document.getElementById('error');
     if(password.value != confirm.value) {
-        error.style.display = 'block';
-        return false;   
+      error.style.color = 'red';
+      error.innerHTML = '⚠️ Passwords should be equal.';
+      error.style.display = 'block';
+      return false;   
     }
     return true;
 }
